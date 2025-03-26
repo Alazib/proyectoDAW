@@ -1,7 +1,7 @@
 # proyectoDAW
 
 ## 📌 Índice  
-1. [¿Qué es *El librero digital*?](#qué-es-'el-librero-digital')  
+1. [¿Qué es *El librero digital*?](#qué-es-el-librero-digital)  
 2. [Manual de usuario](#manual-de-usuario)  
 
 ## ¿Qué es El librero digital?
