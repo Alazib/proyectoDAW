@@ -3,18 +3,20 @@ session_start();
 require("database.php");
 $con = conectar();
 
+
+
 // Verificar si se recibió un ID por GET
 if (!isset($_GET['id']) || empty($_GET['id'])) {
+
     die("ID de usuario no proporcionado.");
 }
 
-$id = $_GET['id'];
-$id = mysqli_real_escape_string($con, $id); // Seguridad contra SQL Injection
+$id_user = $_GET['id'];
+$id_user = mysqli_real_escape_string($con, $id_user); // Seguridad contra SQL Injection
+
 
 // Obtener datos del usuario
-$sql = "SELECT * FROM usuario WHERE id = '$id'";
-$result = mysqli_query($con, $sql);
-$user = mysqli_fetch_assoc($result);
+$user = getUser($con, $id_user);
 
 // Verificar si el usuario existe
 if (!$user) {
@@ -76,31 +78,93 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <h2 class="text-center">Editar Usuario</h2>
 
     <form method="post">
+
         <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" name="nombre" class="form-control" value="<?= htmlspecialchars($user['nombre']); ?>" required>
+            <label class="form-label" for='user_name'>Nombre</label>
+            <input type="text" name="user_name" class="form-control" value=<?= htmlspecialchars($user['user_name']);?> required>
         </div>
+
+        <div class="mb-3" for="user_last_name_1">
+            <label class="form-label">Primer apellido</label>
+            <input type="text" name="user_last_name_1" class="form-control" value="<?= htmlspecialchars($user['user_last_name_1']); ?>" required>
+        </div>
+
+        <div class="mb-3" for="user_last_name_2">
+            <label class="form-label">Segundo apellido (opcional)</label>
+            <input type="text" name="user_last_name_2" class="form-control" value="<?= htmlspecialchars($user['user_last_name_2']); ?>">
+        </div>
+
         <div class="mb-3">
-            <label class="form-label">Usuario</label>
-            <input type="text" name="username" class="form-control" value="<?= htmlspecialchars($user['username']); ?>" required>
+            <label class="form-label" for="id_gender">Género</label>
+                <select name="id_gender" class="form-control">
+                    <?php
+                        $genders = getAllGenders($con);
+                                              
+                        if($user['id_gender']){
+                          
+                         $gender = getGender($con, $user['id_gender'] );
+                         echo '<option value="' . $user['id_gender'] . '">' . $gender['gender'] . '</option>';
+
+                        } else{
+                            echo '<option>Seleccione un género </option>';
+                        }
+
+                        while($row = mysqli_fetch_assoc($genders)){
+
+                            if($user['id_gender'] != $row['id_gender'] ) {
+
+                             echo '<option value="' . $row['id_gender'] . '">' . $row['gender'] . '</option>';
+                            }
+                        };
+                    
+                    ?>
+                </select>   
+         </div>   
+
+         <div class="mb-3">
+            <label class="form-label" for="id_country">País</label>
+                <select name="id_country" class="form-control">
+                    <?php
+                        $countries = getAllCountries($con);
+
+                        while($row = mysqli_fetch_assoc($countries)){
+                            echo '<option value="' . $row['id_country'] . '">' . $row['country'] . '</option>';
+                        };
+                    ?>
+                </select>   
+         </div>  
+
+        <div class="mb-3" for="alias">
+            <label class="form-label">Alias</label>
+            <input type="text" name="alias" class="form-control" value="<?= htmlspecialchars($user['alias']); ?>" required>
         </div>
+
         <div class="mb-3">
             <label class="form-label">Correo Electrónico</label>
             <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user['email']); ?>" required>
         </div>
+
         <div class="mb-3">
-            <label class="form-label">Tipo de Usuario</label>
-            <select name="tipo" class="form-control">
-                <option value="0" <?= ($user['tipo'] == 0) ? 'selected' : ''; ?>>Administrador</option>
-                <option value="1" <?= ($user['tipo'] == 1) ? 'selected' : ''; ?>>Usuario</option>
-            </select>
-        </div>
+            <label class="form-label" for="id_rol">Tipo de usuario</label>
+                <select name="id_rol" class="form-control">
+                    <?php
+                        $rols = getAllRols($con);
+
+                        while($row = mysqli_fetch_assoc($rols)){
+                            echo '<option value="' . $row['id_rol'] . '">' . $row['rol'] . '</option>';
+                        };
+                    ?>
+                </select>   
+         </div>  
+
         <div class="mb-3">
             <label class="form-label">Nueva Contraseña (opcional)</label>
             <input type="password" name="password" class="form-control" placeholder="Dejar en blanco para no cambiar">
         </div>
+
         <button type="submit" class="btn btn-success">Guardar Cambios</button>
         <a href="admin_page.php" class="btn btn-secondary">Cancelar</a>
+
     </form>
 </div>
 

@@ -8,13 +8,14 @@ $errores = []; // Array para almacenar mensajes de error
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST['name']);
     $first_surname = trim($_POST['first_surname']);
+    $id_gender = trim($_POST['id_gender']);
     $alias = trim($_POST['alias']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     $confirm_password = trim($_POST['confirm_password']);
 
     // Validar si los campos están vacíos
-    if (empty($name) || empty($first_surname) || empty($alias) || empty($email) || empty($password) || empty($confirm_password)) {
+    if (empty($name) || empty($first_surname) || empty($id_gender) ||empty($alias) || empty($email) || empty($password) || empty($confirm_password)) {
         $errores[] = 'Por favor, complete todos los campos.';
     } elseif ($password !== $confirm_password) {
         $errores[] = 'Las contraseñas no coinciden.';
@@ -22,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Prevenir inyecciones SQL usando mysqli_real_escape_string
         $name = mysqli_real_escape_string($con, $name);
         $first_surname = mysqli_real_escape_string($con, $first_surname);
+        $id_gender = mysqli_real_escape_string($con, $id_gender);
         $alias = mysqli_real_escape_string($con, $alias);
         $email = mysqli_real_escape_string($con, $email);
 
@@ -41,8 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Consulta SQL para insertar el usuario
         $timestamp = date("Y-m-d H:i:s");
-        $sql = "INSERT INTO users (user_name, alias, user_last_name_1,  email, password_hash, subscription_date, id_rol)
-                 VALUES ('$name', '$alias','$first_surname', '$email', '$hashed_password', '$timestamp', '2')";
+        $sql = "INSERT INTO users (user_name, alias, user_last_name_1, id_gender,  email, password_hash, subscription_date, id_rol)
+                 VALUES ('$name', '$alias','$first_surname', '$id_gender', '$email', '$hashed_password',   '$timestamp', '2')";
 
         // Ejecutar el insert
         if (mysqli_query($con, $sql)) {
@@ -79,6 +81,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="mb-3">
             <label for="first_surname" class="form-label">Primer Apellido</label>
             <input type="text" name="first_surname" class="form-control" id="first_surname" placeholder="Ingrese su primer apellido">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="id_gender">Género</label>
+                <select name="id_gender" class="form-control">
+                    <?php
+                        $genders = getAllGenders($con);
+
+                        while($row = mysqli_fetch_assoc($genders)){
+                            echo '<option value="' . $row['id_gender'] . '">' . $row['gender'] . '</option>';
+                        };
+
+
+                    ?>
+                </select>
+
         </div>
         <div class="mb-3">
             <label for="alias" class="form-label">Alias</label>
