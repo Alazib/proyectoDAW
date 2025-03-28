@@ -63,7 +63,7 @@ if (isset($_POST['login'])) {
 
         <div class="btn-group-custom">
             <button type="submit" name="login" class="btn btn-primary w-50">Iniciar Sesión</button>
-            <a href="registro.php" class="btn btn-secondary w-50">Registrarse</a>
+            <a href="register.php" class="btn btn-secondary w-50">Registrarse</a>
         </div>
     </form>
 </div>
