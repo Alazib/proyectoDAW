@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
     <div class="container mt-5">
-        <h2 class="text-center">Editar usuario <?= htmlspecialchars($user['user_name']); ?> <?= htmlspecialchars($user['user_last_name_1']); ?></h2>
+        <h2 class="text-center"><?= htmlspecialchars($user['user_name']); ?> <?= htmlspecialchars($user['user_last_name_1']); ?></h2>
 
         <div class="mb-3 text-center">
             <p><strong>Suscrito desde:</strong> <?= $subscription_date ?> (hace <?= $time_elapsed ?>)</p>
@@ -95,27 +95,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="post">
 
             <div class="mb-3" for="alias">
-                <label class="form-label">Alias</label>
+                <label class="form-label"><strong>Alias</strong></label>
                 <input type="text" name="alias" class="form-control" value="<?= htmlspecialchars($user['alias']); ?>" required>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for='user_name'>Nombre</label>
+                <label class="form-label" for='user_name'><strong>Nombre</strong></label>
                 <input type="text" name="user_name" class="form-control" value=<?= htmlspecialchars($user['user_name']); ?> required>
             </div>
 
             <div class="mb-3" for="user_last_name_1">
-                <label class="form-label">Primer apellido</label>
+                <label class="form-label"><strong>Primer apellido</strong></label>
                 <input type="text" name="user_last_name_1" class="form-control" value="<?= htmlspecialchars($user['user_last_name_1']); ?>" required>
             </div>
 
             <div class="mb-3" for="user_last_name_2">
-                <label class="form-label">Segundo apellido (opcional)</label>
+                <label class="form-label"><strong>Segundo apellido</strong> (opcional)</label>
                 <input type="text" name="user_last_name_2" class="form-control" value="<?= htmlspecialchars($user['user_last_name_2']); ?>">
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="id_gender">Género</label>
+                <label class="form-label" for="id_gender"><strong>Género</strong> (opcional)</label>
                 <select name="id_gender" class="form-control">
                     <?php
                     $genders = getAllGenders($con);
@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="id_country">País</label>
+                <label class="form-label" for="id_country"><strong>País</strong> (opcional)</label>
                 <select name="id_country" class="form-control">
                     <?php
                     $countries = getAllCountries($con);
@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div>
             <div class="mb-3" for="user_birth_date">
-                <label class="form-label">Fecha de nacimiento:</label>
+                <label class="form-label"><strong>Fecha de nacimiento</strong> (opcional)</label>
 
                 <?php
                 if ($user["user_birth_date"]) {
@@ -178,12 +178,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </br>
 
             <div class="mb-3">
-                <label class="form-label">Correo Electrónico</label>
+                <label class="form-label"><strong>Correo Electrónico</strong></label>
                 <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user['email']); ?>" required>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="id_rol">Tipo de usuario</label>
+                <label class="form-label" for="id_rol"><strong>Tipo de usuario</strong></label>
                 <select name="id_rol" class="form-control">
                     <?php
                     $rols = getAllRols($con);
@@ -196,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Nueva Contraseña (opcional)</label>
+                <label class="form-label"><strong>Nueva Contraseña</strong> (opcional)</label>
                 <input type="password" name="password" class="form-control" placeholder="Dejar en blanco para no cambiar">
             </div>
 
