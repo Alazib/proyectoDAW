@@ -123,6 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($user['id_gender']) {
 
                         $gender = getGender($con, $user['id_gender']);
+                        echo '<option value="' . $user['id_gender'] . '">' . $gender['gender'] . '</option>';
                     } else {
                         echo '<option>Seleccione un género </option>';
                     }
