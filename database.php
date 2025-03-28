@@ -62,12 +62,21 @@ function getUser($con, $id_user){
 }
 
 function getGender($con, $id_gender){
-	$stmt = mysqli_prepare($con, "select gender from gender where id_gender=?;");
+	$stmt = mysqli_prepare($con, "select * from gender where id_gender=?;");
 	mysqli_stmt_bind_param($stmt, "i", $id_gender);
 	mysqli_stmt_execute($stmt);
 	$result = mysqli_stmt_get_result($stmt);
 	$gender = mysqli_fetch_assoc($result);
 	return $gender; 
+}
+
+function getCountry($con, $id_country){
+	$stmt = mysqli_prepare($con, "select * from country where id_country=?;");
+	mysqli_stmt_bind_param($stmt, "i", $id_country);
+	mysqli_stmt_execute($stmt);
+	$result = mysqli_stmt_get_result($stmt);
+	$country = mysqli_fetch_assoc($result);
+	return $country; 
 }
 
 function getAllGenders($con){

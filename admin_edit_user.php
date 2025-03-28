@@ -120,19 +120,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ?>
                 </select>   
          </div>   
-
          <div class="mb-3">
             <label class="form-label" for="id_country">País</label>
                 <select name="id_country" class="form-control">
                     <?php
                         $countries = getAllCountries($con);
+                                              
+                        if($user['id_country']){
+                          
+                         $country = getCountry($con, $user['id_country'] );
+                         echo '<option value="' . $user['id_country'] . '">' . $country['country'] . '</option>';
+
+                        } else{
+                            echo '<option>Seleccione un país </option>';
+                        }
 
                         while($row = mysqli_fetch_assoc($countries)){
-                            echo '<option value="' . $row['id_country'] . '">' . $row['country'] . '</option>';
+
+                            if($user['id_country'] != $row['id_country'] ) {
+
+                             echo '<option value="' . $row['id_country'] . '">' . $row['country'] . '</option>';
+                            }
                         };
+                    
                     ?>
                 </select>   
-         </div>  
+         </div> 
 
         <div class="mb-3" for="alias">
             <label class="form-label">Alias</label>
