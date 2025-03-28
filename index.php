@@ -22,7 +22,7 @@ if (isset($_POST['login'])) {
             $_SESSION['logged_user_type'] = $usuario['id_rol'];
 
             if ($usuario['id_rol'] == 1) {
-                header("Location: admin_page.php");;
+                header("Location: admin_dashboard.php");;
                 exit();
             } else {
                 header("Location: user_page.php");
@@ -63,7 +63,7 @@ if (isset($_POST['login'])) {
 
         <div class="btn-group-custom">
             <button type="submit" name="login" class="btn btn-primary w-50">Iniciar Sesión</button>
-            <a href="register.php" class="btn btn-secondary w-50">Registrarse</a>
+            <a href="register_form.php" class="btn btn-secondary w-50">Registrarse</a>
         </div>
     </form>
 </div>

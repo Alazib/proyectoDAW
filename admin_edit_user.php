@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (mysqli_query($con, $sql_update)) {
             // Redirigir de vuelta a la lista de usuarios
-            header("Location: admin_page.php");
+            header("Location: admin_dashboard.php");
             exit();
         } else {
             echo "<p style='color: red;'>Error al actualizar el usuario: " . mysqli_error($con) . "</p>";
@@ -163,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <button type="submit" class="btn btn-success">Guardar Cambios</button>
-        <a href="admin_page.php" class="btn btn-secondary">Cancelar</a>
+        <a href="admin_dashboard.php" class="btn btn-secondary">Cancelar</a>
 
     </form>
 </div>

@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="register-container">
     <h3 class="text-center">Registro</h3>
     
-    <form id="registerForm" action="register.php" method="post">
+    <form id="registerForm" action="register_form.php" method="post">
         <div class="mb-3">
             <label for="name" class="form-label">Nombre</label>
             <input type="text" name="name" class="form-control" id="name" placeholder="Ingrese su nombre">

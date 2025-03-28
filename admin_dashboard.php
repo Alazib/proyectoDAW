@@ -76,8 +76,8 @@ $result = mysqli_query($con, $sql);
                             <td>••••••</td> <!-- No mostrar la contraseña real -->
                             <td>$rol_name </td>
                             <td>
-                                <a href='edit_user.php?id={$row['id_user']}' class='btn btn-warning btn-sm'>Editar</a>
-                                <a href='delete_user.php?id={$row['id_user']}' class='btn btn-danger btn-sm'>Eliminar</a>
+                                <a href='admin_edit_user.php?id={$row['id_user']}' class='btn btn-warning btn-sm'>Editar</a>
+                                <a href='admin_delete_user.php?id={$row['id_user']}' class='btn btn-danger btn-sm'>Eliminar</a>
                             </td>
                         </tr>";
                 }
