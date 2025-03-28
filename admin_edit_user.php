@@ -146,6 +146,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ?>
                 </select>   
          </div> 
+          <div class="mb-3" for="user_birth_date">
+            <label class="form-label" >Fecha de nacimiento:</label>
+
+            <?php
+                if ($user["user_birth_date"]) {
+                    echo '<input type="date" name="user_birth_date" class="form-control" value="' . $user["user_birth_date"] . '" max="' . date('Y-m-d') . '">';
+                } else {
+                    echo '<input type="date" name="user_birth_date" class="form-control" max="' . date('Y-m-d') . '">';
+                }
+                ?>  
+           </div>
+                    </br>
+                    </br>
 
         <div class="mb-3" for="alias">
             <label class="form-label">Alias</label>
