@@ -34,35 +34,58 @@ if (!$user) {
 
 // Procesar el formulario si se envió
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nombre = trim($_POST['nombre']);
-    $username = trim($_POST['username']);
+    $alias = trim($_POST['alias']);
+    $user_name = trim($_POST['user_name']);
+    $user_last_name_1 = trim($_POST['user_last_name_1']);
+    $user_last_name_2 = trim($_POST['user_last_name_2']);
+    $id_gender = trim($_POST['id_gender']);
+    $id_country = trim($_POST['id_country']);
+    $user_birth_date = trim($_POST['user_birth_date']);
+
     $email = trim($_POST['email']);
-    $tipo = trim($_POST['tipo']);
+    $id_rol = trim($_POST['id_rol']);
     $password = trim($_POST['password']);
 
     // Validaciones básicas
-    if (empty($nombre) || empty($username) || empty($email)) {
-        echo "<p style='color: red;'>Todos los campos obligatorios deben estar completos.</p>";
+    if (empty($user_name) || empty($user_last_name_1) || empty($alias) || empty($email) || empty($id_rol)) {
+        echo "<p style='color: red;'>Todos los campos NO opcionales deben estar completos.</p>";
     } else {
         // Escapar datos para evitar SQL Injection
-        $nombre = mysqli_real_escape_string($con, $nombre);
-        $username = mysqli_real_escape_string($con, $username);
+        $alias = mysqli_real_escape_string($con, $alias);
+        $user_name = mysqli_real_escape_string($con, $user_name);
+        $user_last_name_1 = mysqli_real_escape_string($con, $user_last_name_1);
+        $user_last_name_2 = mysqli_real_escape_string($con, $user_last_name_2);
+        $id_gender = mysqli_real_escape_string($con, $id_gender);
+        $id_country = mysqli_real_escape_string($con, $id_country);
+        $user_birth_date = mysqli_real_escape_string($con, $user_birth_date);
+
         $email = mysqli_real_escape_string($con, $email);
-        $tipo = mysqli_real_escape_string($con, $tipo);
+        $id_rol = mysqli_real_escape_string($con, $id_rol);
+        $password = mysqli_real_escape_string($con, $password);
+
 
         // Iniciar consulta de actualización
-        $sql_update = "UPDATE usuario SET nombre='$nombre', username='$username', email='$email', tipo='$tipo'";
+        $sql_update = "UPDATE users SET alias='$alias', 
+                                        user_name='$user_name', 
+                                        user_last_name_1='$user_last_name_1', 
+                                        user_last_name_2='$user_last_name_2',
+                                        id_gender='$id_gender',
+                                        id_country='$id_country',
+                                        user_birth_date='$user_birth_date',
+                                        email='$email',
+                                        id_rol='$id_rol' 
+                                        ";
 
         // Si el usuario ingresó una nueva contraseña, la encriptamos y la actualizamos
         if (!empty($password)) {
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-            $sql_update .= ", pass='$hashed_password'";
+            $sql_update .= ", password_hash='$hashed_password'";
         }
 
         // Completar la consulta con la condición WHERE
-        $sql_update .= " WHERE id='$id'";
+        $sql_update .= " WHERE id_user='$id_user'";
 
-        if (mysqli_query($con, $sql_update)) {
+        if (update($con, $sql_update)) {
             // Redirigir de vuelta a la lista de usuarios
             header("Location: admin_dashboard.php");
             exit();
@@ -187,10 +210,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label class="form-label" for="id_rol"><strong>Tipo de usuario</strong></label>
                 <select name="id_rol" class="form-control">
                     <?php
+
                     $rols = getAllRols($con);
+                    $user_rol = getRol($con, $user['id_rol']);
+
+                    echo '<option value="' . $user['id_rol'] . '">' . $user_rol['rol'] . '</option>';
 
                     while ($row = mysqli_fetch_assoc($rols)) {
-                        echo '<option value="' . $row['id_rol'] . '">' . $row['rol'] . '</option>';
+
+                        if ($user['id_rol'] != $row['id_rol']) {
+
+                            echo '<option value="' . $row['id_rol'] . '">' . $row['rol'] . '</option>';
+                        }
                     };
                     ?>
                 </select>
