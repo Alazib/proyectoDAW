@@ -4,19 +4,28 @@ require("database.php");
 $con = conectar();
 
 
-
 // Verificar si se recibió un ID por GET
 if (!isset($_GET['id']) || empty($_GET['id'])) {
 
     die("ID de usuario no proporcionado.");
 }
 
+// Obtener id del usuario a través de la URL
 $id_user = $_GET['id'];
 $id_user = mysqli_real_escape_string($con, $id_user); // Seguridad contra SQL Injection
 
 
 // Obtener datos del usuario
 $user = getUser($con, $id_user);
+
+
+$subscription_date = $user['subscription_date'];
+
+$datetime1 = new DateTime($subscription_date);
+$datetime2 = new DateTime();
+$interval = $datetime1->diff($datetime2);
+
+$time_elapsed = $interval->y . " años, " . $interval->m . " meses y " . $interval->d . " días";
 
 // Verificar si el usuario existe
 if (!$user) {
@@ -25,35 +34,58 @@ if (!$user) {
 
 // Procesar el formulario si se envió
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nombre = trim($_POST['nombre']);
-    $username = trim($_POST['username']);
+    $alias = trim($_POST['alias']);
+    $user_name = trim($_POST['user_name']);
+    $user_last_name_1 = trim($_POST['user_last_name_1']);
+    $user_last_name_2 = trim($_POST['user_last_name_2']);
+    $id_gender = trim($_POST['id_gender']);
+    $id_country = trim($_POST['id_country']);
+    $user_birth_date = trim($_POST['user_birth_date']);
+
     $email = trim($_POST['email']);
-    $tipo = trim($_POST['tipo']);
+    $id_rol = trim($_POST['id_rol']);
     $password = trim($_POST['password']);
 
     // Validaciones básicas
-    if (empty($nombre) || empty($username) || empty($email)) {
-        echo "<p style='color: red;'>Todos los campos obligatorios deben estar completos.</p>";
+    if (empty($user_name) || empty($user_last_name_1) || empty($alias) || empty($email) || empty($id_rol)) {
+        echo "<p style='color: red;'>Todos los campos NO opcionales deben estar completos.</p>";
     } else {
         // Escapar datos para evitar SQL Injection
-        $nombre = mysqli_real_escape_string($con, $nombre);
-        $username = mysqli_real_escape_string($con, $username);
+        $alias = mysqli_real_escape_string($con, $alias);
+        $user_name = mysqli_real_escape_string($con, $user_name);
+        $user_last_name_1 = mysqli_real_escape_string($con, $user_last_name_1);
+        $user_last_name_2 = mysqli_real_escape_string($con, $user_last_name_2);
+        $id_gender = mysqli_real_escape_string($con, $id_gender);
+        $id_country = mysqli_real_escape_string($con, $id_country);
+        $user_birth_date = mysqli_real_escape_string($con, $user_birth_date);
+
         $email = mysqli_real_escape_string($con, $email);
-        $tipo = mysqli_real_escape_string($con, $tipo);
+        $id_rol = mysqli_real_escape_string($con, $id_rol);
+        $password = mysqli_real_escape_string($con, $password);
+
 
         // Iniciar consulta de actualización
-        $sql_update = "UPDATE usuario SET nombre='$nombre', username='$username', email='$email', tipo='$tipo'";
+        $sql_update = "UPDATE users SET alias='$alias', 
+                                        user_name='$user_name', 
+                                        user_last_name_1='$user_last_name_1', 
+                                        user_last_name_2='$user_last_name_2',
+                                        id_gender='$id_gender',
+                                        id_country='$id_country',
+                                        user_birth_date='$user_birth_date',
+                                        email='$email',
+                                        id_rol='$id_rol' 
+                                        ";
 
         // Si el usuario ingresó una nueva contraseña, la encriptamos y la actualizamos
         if (!empty($password)) {
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-            $sql_update .= ", pass='$hashed_password'";
+            $sql_update .= ", password_hash='$hashed_password'";
         }
 
         // Completar la consulta con la condición WHERE
-        $sql_update .= " WHERE id='$id'";
+        $sql_update .= " WHERE id_user='$id_user'";
 
-        if (mysqli_query($con, $sql_update)) {
+        if (update($con, $sql_update)) {
             // Redirigir de vuelta a la lista de usuarios
             header("Location: admin_dashboard.php");
             exit();
@@ -66,108 +98,147 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="container mt-5">
-    <h2 class="text-center">Editar Usuario</h2>
+    <div class="container mt-5">
+        <h2 class="text-center"><?= htmlspecialchars($user['user_name']); ?> <?= htmlspecialchars($user['user_last_name_1']); ?></h2>
 
-    <form method="post">
-
-        <div class="mb-3">
-            <label class="form-label" for='user_name'>Nombre</label>
-            <input type="text" name="user_name" class="form-control" value=<?= htmlspecialchars($user['user_name']);?> required>
+        <div class="mb-3 text-center">
+            <p><strong>Suscrito desde:</strong> <?= $subscription_date ?> (hace <?= $time_elapsed ?>)</p>
         </div>
 
-        <div class="mb-3" for="user_last_name_1">
-            <label class="form-label">Primer apellido</label>
-            <input type="text" name="user_last_name_1" class="form-control" value="<?= htmlspecialchars($user['user_last_name_1']); ?>" required>
-        </div>
+        <form method="post">
 
-        <div class="mb-3" for="user_last_name_2">
-            <label class="form-label">Segundo apellido (opcional)</label>
-            <input type="text" name="user_last_name_2" class="form-control" value="<?= htmlspecialchars($user['user_last_name_2']); ?>">
-        </div>
+            <div class="mb-3" for="alias">
+                <label class="form-label"><strong>Alias</strong></label>
+                <input type="text" name="alias" class="form-control" value="<?= htmlspecialchars($user['alias']); ?>" required>
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label" for="id_gender">Género</label>
+            <div class="mb-3">
+                <label class="form-label" for='user_name'><strong>Nombre</strong></label>
+                <input type="text" name="user_name" class="form-control" value=<?= htmlspecialchars($user['user_name']); ?> required>
+            </div>
+
+            <div class="mb-3" for="user_last_name_1">
+                <label class="form-label"><strong>Primer apellido</strong></label>
+                <input type="text" name="user_last_name_1" class="form-control" value="<?= htmlspecialchars($user['user_last_name_1']); ?>" required>
+            </div>
+
+            <div class="mb-3" for="user_last_name_2">
+                <label class="form-label"><strong>Segundo apellido</strong> (opcional)</label>
+                <input type="text" name="user_last_name_2" class="form-control" value="<?= htmlspecialchars($user['user_last_name_2']); ?>">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="id_gender"><strong>Género</strong> (opcional)</label>
                 <select name="id_gender" class="form-control">
                     <?php
-                        $genders = getAllGenders($con);
-                                              
-                        if($user['id_gender']){
-                          
-                         $gender = getGender($con, $user['id_gender'] );
-                         echo '<option value="' . $user['id_gender'] . '">' . $gender['gender'] . '</option>';
+                    $genders = getAllGenders($con);
 
-                        } else{
-                            echo '<option>Seleccione un género </option>';
+                    if ($user['id_gender']) {
+
+                        $gender = getGender($con, $user['id_gender']);
+                        echo '<option value="' . $user['id_gender'] . '">' . $gender['gender'] . '</option>';
+                    } else {
+                        echo '<option>Seleccione un género </option>';
+                    }
+
+                    while ($row = mysqli_fetch_assoc($genders)) {
+
+                        if ($user['id_gender'] != $row['id_gender']) {
+
+                            echo '<option value="' . $row['id_gender'] . '">' . $row['gender'] . '</option>';
                         }
+                    };
 
-                        while($row = mysqli_fetch_assoc($genders)){
-
-                            if($user['id_gender'] != $row['id_gender'] ) {
-
-                             echo '<option value="' . $row['id_gender'] . '">' . $row['gender'] . '</option>';
-                            }
-                        };
-                    
                     ?>
-                </select>   
-         </div>   
-
-         <div class="mb-3">
-            <label class="form-label" for="id_country">País</label>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id_country"><strong>País</strong> (opcional)</label>
                 <select name="id_country" class="form-control">
                     <?php
-                        $countries = getAllCountries($con);
+                    $countries = getAllCountries($con);
 
-                        while($row = mysqli_fetch_assoc($countries)){
+                    if ($user['id_country']) {
+
+                        $country = getCountry($con, $user['id_country']);
+                        echo '<option value="' . $user['id_country'] . '">' . $country['country'] . '</option>';
+                    } else {
+                        echo '<option>Seleccione un país </option>';
+                    }
+
+                    while ($row = mysqli_fetch_assoc($countries)) {
+
+                        if ($user['id_country'] != $row['id_country']) {
+
                             echo '<option value="' . $row['id_country'] . '">' . $row['country'] . '</option>';
-                        };
+                        }
+                    };
+
                     ?>
-                </select>   
-         </div>  
+                </select>
+            </div>
+            <div class="mb-3" for="user_birth_date">
+                <label class="form-label"><strong>Fecha de nacimiento</strong> (opcional)</label>
 
-        <div class="mb-3" for="alias">
-            <label class="form-label">Alias</label>
-            <input type="text" name="alias" class="form-control" value="<?= htmlspecialchars($user['alias']); ?>" required>
-        </div>
+                <?php
+                if ($user["user_birth_date"]) {
+                    echo '<input type="date" name="user_birth_date" class="form-control" value="' . $user["user_birth_date"] . '" max="' . date('Y-m-d') . '">';
+                } else {
+                    echo '<input type="date" name="user_birth_date" class="form-control" max="' . date('Y-m-d') . '">';
+                }
+                ?>
+            </div>
+            </br>
+            </br>
 
-        <div class="mb-3">
-            <label class="form-label">Correo Electrónico</label>
-            <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user['email']); ?>" required>
-        </div>
+            <div class="mb-3">
+                <label class="form-label"><strong>Correo Electrónico</strong></label>
+                <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user['email']); ?>" required>
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label" for="id_rol">Tipo de usuario</label>
+            <div class="mb-3">
+                <label class="form-label" for="id_rol"><strong>Tipo de usuario</strong></label>
                 <select name="id_rol" class="form-control">
                     <?php
-                        $rols = getAllRols($con);
 
-                        while($row = mysqli_fetch_assoc($rols)){
+                    $rols = getAllRols($con);
+                    $user_rol = getRol($con, $user['id_rol']);
+
+                    echo '<option value="' . $user['id_rol'] . '">' . $user_rol['rol'] . '</option>';
+
+                    while ($row = mysqli_fetch_assoc($rols)) {
+
+                        if ($user['id_rol'] != $row['id_rol']) {
+
                             echo '<option value="' . $row['id_rol'] . '">' . $row['rol'] . '</option>';
-                        };
+                        }
+                    };
                     ?>
-                </select>   
-         </div>  
+                </select>
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">Nueva Contraseña (opcional)</label>
-            <input type="password" name="password" class="form-control" placeholder="Dejar en blanco para no cambiar">
-        </div>
+            <div class="mb-3">
+                <label class="form-label"><strong>Nueva Contraseña</strong> (opcional)</label>
+                <input type="password" name="password" class="form-control" placeholder="Dejar en blanco para no cambiar">
+            </div>
 
-        <button type="submit" class="btn btn-success">Guardar Cambios</button>
-        <a href="admin_dashboard.php" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-success">Guardar Cambios</button>
+            <a href="admin_dashboard.php" class="btn btn-secondary">Cancelar</a>
 
-    </form>
-</div>
+        </form>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
