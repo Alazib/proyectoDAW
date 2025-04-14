@@ -270,7 +270,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function confirm_profile_changes() {
+        function confirm_profile_changes() { // No pongo este script al priincipio donde está $show_success_alert porque ahí ya se ha enviado el formulario
+            // y aquí quiero que se me diga si lo envío o no lo envío.
             return confirm("¿Estás seguro de que quieres guardar los cambios?");
         }
     </script>
