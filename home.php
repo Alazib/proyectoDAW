@@ -32,7 +32,7 @@
 <!-- Banner -->
 <div class="bg-light py-4 text-center border-bottom">
     <h1 class="display-5">Descubre, puntúa y comenta tus libros favoritos</h1>
-    <p class="lead text-muted">Bienvenido a la comunidad de lectores</p>
+    <p class="lead text-muted">Bienvenido a la comunidad de lectores.</p>
 </div>
 
 <!-- Novedades -->
