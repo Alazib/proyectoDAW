@@ -1,5 +1,6 @@
 <?php
 session_start();
+$show_success_alert = false;
 require("database.php");
 $con = conectar();
 
@@ -86,9 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql_update .= " WHERE id_user='$id_user'";
 
         if (update($con, $sql_update)) {
-            // Redirigir de vuelta a la lista de usuarios
-            header("Location: admin_dashboard.php");
-            exit();
+            $show_success_alert = true; // ✅ Esto indica que fue exitoso
         } else {
             echo "<p style='color: red;'>Error al actualizar el usuario: " . mysqli_error($con) . "</p>";
         }
@@ -105,6 +104,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Editar Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
+<?php if ($show_success_alert): ?>
+    <script>
+        alert("✅ Cambios guardados satisfactoriamente.");
+        window.location.href = "home.php";
+    </script>
+<?php endif; ?>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -139,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p><strong>Suscrito desde:</strong> <?= $subscription_date ?> (hace <?= $time_elapsed ?>)</p>
         </div>
 
-        <form method="post" action="home.php">
+        <form method="post">
 
             <div class="mb-3" for="alias">
                 <label class="form-label"><strong>Alias</strong></label>
