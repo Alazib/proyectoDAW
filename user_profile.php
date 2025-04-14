@@ -262,13 +262,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" name="password" class="form-control" placeholder="Dejar en blanco para no cambiar">
             </div>
 
-            <button type="submit" class="btn btn-success">Guardar Cambios</button>
+            <button type="submit" class="btn btn-success" onclick="return confirm_profile_changes()">Guardar Cambios</button>
             <a href="home.php" class="btn btn-secondary">Cancelar</a>
 
         </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirm_profile_changes() {
+            return confirm("¿Estás seguro de que quieres guardar los cambios?");
+        }
+    </script>
 </body>
 
 </html>
