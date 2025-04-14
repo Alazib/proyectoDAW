@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p><strong>Suscrito desde:</strong> <?= $subscription_date ?> (hace <?= $time_elapsed ?>)</p>
         </div>
 
-        <form method="post">
+        <form method="post" action="home.php">
 
             <div class="mb-3" for="alias">
                 <label class="form-label"><strong>Alias</strong></label>
@@ -257,7 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <button type="submit" class="btn btn-success">Guardar Cambios</button>
-            <a href="admin_dashboard.php" class="btn btn-secondary">Cancelar</a>
+            <a href="home.php" class="btn btn-secondary">Cancelar</a>
 
         </form>
     </div>
