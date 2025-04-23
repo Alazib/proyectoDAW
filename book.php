@@ -3,7 +3,7 @@
 $bookId = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ($bookId) {
-    // Realizar una llamada a la API para obtener más detalles sobre el libro
+
     $url = "https://openlibrary.org/works/$bookId.json";
     $response = file_get_contents($url);
     if ($response === FALSE) {
