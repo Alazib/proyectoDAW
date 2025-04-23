@@ -26,11 +26,13 @@ function getRandomBooks($count)
         $author = $book['authors'][0]['name'] ?? 'Autor desconocido';
         $coverId = $book['cover_id'] ?? null;
         $coverUrl = $coverId ? "https://covers.openlibrary.org/b/id/{$coverId}-L.jpg" : null;
+        $bookId = $book['key'] ?? null;
 
         $result[] = [
             'title' => $title,
             'author' => $author,
             'cover' => $coverUrl,
+            'id' => $bookId
         ];
     }
 

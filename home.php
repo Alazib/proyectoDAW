@@ -19,9 +19,6 @@ $recomendaciones = getRandomBooks(12);
 
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -54,8 +51,6 @@ $recomendaciones = getRandomBooks(12);
                             Perfil de <?php echo htmlspecialchars($alias); ?>
                         </a>
                     </li>
-
-
                 </ul>
             </div>
         </div>
@@ -81,11 +76,13 @@ $recomendaciones = getRandomBooks(12);
                             <?php foreach ($chunk as $book): ?>
                                 <div class="col-4">
                                     <div class="card h-100">
-                                        <img src="<?php echo $book['cover']; ?>" class="card-img-top img-fluid img-size" alt="<?php echo $book['title']; ?>">
-                                        <div class="card-body text-center">
-                                            <h6 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h6>
-                                            <p class="text-muted small"><?php echo htmlspecialchars($book['author']); ?></p>
-                                        </div>
+                                        <a href="book.php?id=<?php echo urlencode(substr($book['id'], 7)); ?>">
+                                            <img src="<?php echo $book['cover']; ?>" class="card-img-top img-fluid img-size" alt="<?php echo $book['title']; ?>">
+                                            <div class="card-body text-center">
+                                                <h6 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h6>
+                                                <p class="text-muted small"><?php echo htmlspecialchars($book['author']); ?></p>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -118,12 +115,14 @@ $recomendaciones = getRandomBooks(12);
                             <?php foreach ($chunk as $book): ?>
                                 <div class="col-4">
                                     <div class="card h-100 border-warning">
-                                        <img src="<?php echo $book['cover']; ?>" class="card-img-top img-fluid img-size" alt="<?php echo $book['title']; ?>">
-                                        <div class="card-body text-center">
-                                            <h5 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h5>
-                                            <p class="text-muted">"Una lectura increíble..."</p>
-                                            <span class="badge bg-warning text-dark">★ 5/5</span>
-                                        </div>
+                                        <a href="book.php?id=<?php echo urlencode(substr($book['id'], 7)); ?>">
+                                            <img src="<?php echo $book['cover']; ?>" class="card-img-top img-fluid img-size" alt="<?php echo $book['title']; ?>">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h5>
+                                                <p class="text-muted">"Una lectura increíble..."</p>
+                                                <span class="badge bg-warning text-dark">★ 5/5</span>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -142,7 +141,6 @@ $recomendaciones = getRandomBooks(12);
         </div>
     </div>
 
-
     <!-- Recomendaciones -->
     <div class="container my-5">
         <h2 class="mb-4">🎯 Recomendaciones para ti</h2>
@@ -157,11 +155,13 @@ $recomendaciones = getRandomBooks(12);
                             <?php foreach ($chunk as $book): ?>
                                 <div class="col-4">
                                     <div class="card h-100">
-                                        <img src="<?php echo $book['cover']; ?>" class="card-img-top img-fluid img-size" alt="<?php echo $book['title']; ?>">
-                                        <div class="card-body text-center">
-                                            <h6 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h6>
-                                            <p class="text-muted small">Basado en tus gustos</p>
-                                        </div>
+                                        <a href="book.php?id=<?php echo urlencode(substr($book['id'], 7)); ?>">
+                                            <img src="<?php echo $book['cover']; ?>" class="card-img-top img-fluid img-size" alt="<?php echo $book['title']; ?>">
+                                            <div class="card-body text-center">
+                                                <h6 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h6>
+                                                <p class="text-muted small">Basado en tus gustos</p>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -179,82 +179,6 @@ $recomendaciones = getRandomBooks(12);
             </button>
         </div>
     </div>
-
-    <!-- Descubre tu género favorito -->
-    <div class="container my-5">
-        <h2 class="text-center mb-2">Descubre tu género literario favorito</h2>
-        <h5 class="text-center text-muted mb-4">TEMÁTICAS DESTACADAS</h5>
-        <div class="row row-cols-1 row-cols-md-5 g-4 text-center">
-
-            <!-- Fantasía -->
-            <div class="col">
-                <div class="card h-100 border-0">
-                    <div class="p-4" style="background-color: #8e44ad;">
-                        <img src="img/fantasia.png" alt="Fantasía" style="width: 60px;">
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title fw-bold">Fantasía</h6>
-                        <p class="card-text small text-muted">Viaja a mundos mágicos, conoce criaturas legendarias y vive aventuras épicas donde todo es posible.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Romance -->
-            <div class="col">
-                <div class="card h-100 border-0">
-                    <div class="p-4" style="background-color: #e74c3c;">
-                        <img src="img/romance.png" alt="Romance" style="width: 60px;">
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title fw-bold">Romance</h6>
-                        <p class="card-text small text-muted">Sumérgete en historias de amor intensas, relaciones inolvidables y emociones a flor de piel.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Novela Policiaca -->
-            <div class="col">
-                <div class="card h-100 border-0">
-                    <div class="p-4" style="background-color: #34495e;">
-                        <img src="img/policiaco.png" alt="Novela policiaca" style="width: 60px;">
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title fw-bold">Novela Policiaca</h6>
-                        <p class="card-text small text-muted">Sigue a detectives brillantes y resuelve crímenes intrigantes en tramas llenas de suspenso.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Terror -->
-            <div class="col">
-                <div class="card h-100 border-0">
-                    <div class="p-4" style="background-color: #c0392b;">
-                        <img src="img/terror.png" alt="Terror" style="width: 60px;">
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title fw-bold">Terror</h6>
-                        <p class="card-text small text-muted">Enfréntate a tus miedos con historias que te pondrán los pelos de punta. Misterios, criaturas y horrores sobrenaturales.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Poesía -->
-            <div class="col">
-                <div class="card h-100 border-0">
-                    <div class="p-4" style="background-color: #16a085;">
-                        <img src="img/poesia.png" alt="Poesía" style="width: 60px;">
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title fw-bold">Poesía</h6>
-                        <p class="card-text small text-muted">Descubre la belleza de las palabras en versos que emocionan, inspiran y hacen reflexionar.</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center mt-5 p-3">
