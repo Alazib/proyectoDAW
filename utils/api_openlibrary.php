@@ -3,7 +3,8 @@ function getRandomBooks($count)
 {
     $randomSubjects = ['fantasy', 'science_fiction', 'romance', 'mystery', 'history', 'biography', 'thriller', 'children', 'horror', 'adventure'];
     $subject = $randomSubjects[array_rand($randomSubjects)];
-    $url = "https://openlibrary.org/subjects/$subject.json?limit=$count";
+    $offset = rand(0, 100);
+    $url = "https://openlibrary.org/subjects/$subject.json?limit=$count&offset=$offset";
 
     $response = file_get_contents($url);
     if ($response === FALSE) {
