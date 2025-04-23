@@ -1,5 +1,7 @@
 <?php
 
+require("utils/api_openlibrary.php");
+
 session_start();
 
 $alias = $_SESSION['alias'];
@@ -11,7 +13,13 @@ if (!isset($_SESSION['id_user'])) {
     exit();
 }
 
+$novedades = getRandomBooks(12);
+$destacados = getRandomBooks(12);
+$recomendaciones = getRandomBooks(12);
+
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -62,117 +70,113 @@ if (!isset($_SESSION['id_user'])) {
     <!-- Novedades -->
     <div class="container my-5">
         <h2 class="mb-4">📕 Novedades</h2>
-        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-4">
-            <div class="col">
-                <div class="card h-100"><img src="img/novedad1.jpg" class="card-img-top img-novedad">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">El Juego de los Dioses</h6>
-                        <p class="text-muted small">Abigail Owen</p>
+        <div id="novedadesCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <?php
+                $chunks = array_chunk($novedades, 3);
+                foreach ($chunks as $index => $chunk):
+                ?>
+                    <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+                        <div class="row">
+                            <?php foreach ($chunk as $book): ?>
+                                <div class="col-4">
+                                    <div class="card h-100">
+                                        <img src="<?php echo $book['cover']; ?>" class="card-img-top img-fluid img-size" alt="<?php echo $book['title']; ?>">
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h6>
+                                            <p class="text-muted small"><?php echo htmlspecialchars($book['author']); ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
             </div>
-            <div class="col">
-                <div class="card h-100"><img src="img/novedad2.jpg" class="card-img-top img-novedad">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Quicksilver</h6>
-                        <p class="text-muted small">Callie Hart</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100"><img src="img/novedad3.jpg" class="card-img-top img-novedad">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Dirty Diana</h6>
-                        <p class="text-muted small">Shana Fest y Jen Besser</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100"><img src="img/novedad4.webp" class="card-img-top img-novedad">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">La vida es física</h6>
-                        <p class="text-muted small">Alba Moreno</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100"><img src="img/novedad5.jpg" class="card-img-top img-novedad">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Todos mis poemas hablan de ti</h6>
-                        <p class="text-muted small">Manu Erena</p>
-                    </div>
-                </div>
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#novedadesCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#novedadesCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
         </div>
     </div>
 
     <!-- Lo más destacado -->
     <div class="container my-5">
         <h2 class="mb-4">🌟 Lo más destacado</h2>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            <div class="col">
-                <div class="card h-100 border-warning"><img src="img/destacado1.jpg" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">El nombre del viento</h5>
-                        <p class="text-muted">"Una lectura increíble..."</p><span class="badge bg-warning text-dark">★ 5/5</span>
+        <div id="destacadosCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <?php
+                $chunks = array_chunk($destacados, 3);
+                foreach ($chunks as $index => $chunk):
+                ?>
+                    <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+                        <div class="row">
+                            <?php foreach ($chunk as $book): ?>
+                                <div class="col-4">
+                                    <div class="card h-100 border-warning">
+                                        <img src="<?php echo $book['cover']; ?>" class="card-img-top img-fluid img-size" alt="<?php echo $book['title']; ?>">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h5>
+                                            <p class="text-muted">"Una lectura increíble..."</p>
+                                            <span class="badge bg-warning text-dark">★ 5/5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
             </div>
-            <div class="col">
-                <div class="card h-100 border-warning"><img src="img/destacado2.jpg" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">El señor de los anillos</h5>
-                        <p class="text-muted">"Muy recomendado..."</p><span class="badge bg-warning text-dark">★ 4.5/5</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100 border-warning"><img src="img/destacado3.jpg" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Alas de sangre</h5>
-                        <p class="text-muted">"Obra maestra literaria"</p><span class="badge bg-warning text-dark">★ 4.8/5</span>
-                    </div>
-                </div>
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#destacadosCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#destacadosCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
         </div>
     </div>
+
 
     <!-- Recomendaciones -->
     <div class="container my-5">
         <h2 class="mb-4">🎯 Recomendaciones para ti</h2>
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            <div class="col">
-                <div class="card h-100"><img src="img/recomendado1.jpg" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Harry Potter y la piedra filosofal</h6>
-                        <p class="text-muted small">Basado en tus gustos</p>
+        <div id="recomendacionesCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <?php
+                $chunks = array_chunk($recomendaciones, 3);
+                foreach ($chunks as $index => $chunk):
+                ?>
+                    <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+                        <div class="row">
+                            <?php foreach ($chunk as $book): ?>
+                                <div class="col-4">
+                                    <div class="card h-100">
+                                        <img src="<?php echo $book['cover']; ?>" class="card-img-top img-fluid img-size" alt="<?php echo $book['title']; ?>">
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h6>
+                                            <p class="text-muted small">Basado en tus gustos</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
             </div>
-            <div class="col">
-                <div class="card h-100"><img src="img/recomendado2.jpg" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Nacidos de la Bruma</h6>
-                        <p class="text-muted small">Basado en tus gustos</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100"><img src="img/recomendado3.jpg" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Juego de tronos</h6>
-                        <p class="text-muted small">Basado en tus gustos</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100"><img src="img/recomendado4.jpg" class="card-img-top">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">IT</h6>
-                        <p class="text-muted small">Basado en tus gustos</p>
-                    </div>
-                </div>
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#recomendacionesCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#recomendacionesCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
         </div>
     </div>
 
