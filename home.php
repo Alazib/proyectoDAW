@@ -27,6 +27,7 @@ $recomendaciones = getRandomBooks(12);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proyecto - Inicio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="styles/home.css">
 </head>
 
@@ -184,8 +185,6 @@ $recomendaciones = getRandomBooks(12);
     <footer class="bg-dark text-white text-center mt-5 p-3">
         <p>&copy; <?php echo date("Y"); ?> Proyecto. Proyecto DAW.</p>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

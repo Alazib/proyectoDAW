@@ -17,11 +17,9 @@ footer {
 
 .carousel-control-prev,
 .carousel-control-next {
-  left: 0;
   right: 0;
   position: absolute;
-  top: 50%;
-  transform: translateY(-10%);
   width: 5%;
   color: black;
+  opacity: 1;
 }
