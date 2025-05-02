@@ -244,6 +244,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             return confirm("¿Estás seguro de que quieres guardar los cambios?");
         }
     </script>
+
+    <?php
+
+    require('./components/footer.php');
+    ?>
 </body>
 
 </html>

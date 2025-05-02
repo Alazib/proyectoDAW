@@ -3,6 +3,7 @@
 require("utils/api_openlibrary.php");
 require('./components/navbar.php');
 
+
 $user_is_logged = isset($alias, $id_user);
 
 if (!isset($id_user)) {
@@ -155,9 +156,10 @@ $recomendaciones = getRandomBooks(12);
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center mt-5 p-3">
-        <p>&copy; <?php echo date("Y"); ?> Proyecto. Proyecto DAW.</p>
-    </footer>
+    <?php
+
+    require('./components/footer.php');
+    ?>
 </body>
 
 </html>

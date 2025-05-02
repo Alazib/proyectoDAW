@@ -107,9 +107,10 @@ $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
     </main>
 
     <!-- Footer -->
-    <footer class="footer bg-dark text-white text-center p-3">
-        <p class="mb-0">&copy; <?php echo date("Y"); ?> Proyecto. Proyecto DAW.</p>
-    </footer>
+    <?php
+
+    require('./components/footer.php');
+    ?>
 
 </body>
 
