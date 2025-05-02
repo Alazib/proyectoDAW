@@ -26,7 +26,7 @@ $recomendaciones = getRandomBooks(12);
     <title>Proyecto - Inicio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./scripts/search_books.js" defer></script>
+    <script src="./scripts/searcher.js" defer></script>
     <link rel="stylesheet" href="styles/home.css">
 </head>
 
@@ -38,13 +38,25 @@ $recomendaciones = getRandomBooks(12);
         <h1 class="display-5">Descubre, puntúa y comenta tus libros favoritos</h1>
         <p class="lead text-muted">Bienvenido a la comunidad de lectores.</p>
     </div>
+    <!-- Buscadores de libros y autores -->
     <div class="container my-4">
-        <div class="mb-3">
-            <label for="search-book" class="form-label">🔍 Buscar libro por título</label>
-            <input type="text" class="form-control" id="search-book" placeholder="Escribe el título...">
-            <ul class="list-group mt-2" id="search-results" style="display:none;"></ul>
+        <div class="row">
+            <!-- Buscador por título -->
+            <div class="col-md-6">
+                <label for="search-book" class="form-label">🔍 Buscar libro por título</label>
+                <input type="text" class="form-control" id="search-book" placeholder="Escribe el título...">
+                <ul class="list-group mt-2" id="search-results" style="display: none;"></ul>
+            </div>
+
+            <!-- Buscador por autor -->
+            <div class="col-md-6">
+                <label for="search-author" class="form-label">👤 Buscar por autor</label>
+                <input type="text" class="form-control" id="search-author" placeholder="Escribe el nombre del autor...">
+                <ul class="list-group mt-2" id="author-results" style="display: none;"></ul>
+            </div>
         </div>
     </div>
+
 
     <!-- Novedades -->
     <div class="container my-5">
