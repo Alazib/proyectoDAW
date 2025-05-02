@@ -1,6 +1,7 @@
 <?php
 session_start();
 require("database.php");
+
 $con = conectar();
 
 $error_message = ""; // Variable para almacenar el mensaje de error

@@ -1,8 +1,10 @@
 <?php
 session_start();
-$show_success_alert = false;
+
 require("database.php");
+
 $con = conectar();
+$show_success_alert = false;
 
 
 // Verificar si se recibió un ID por GET
@@ -21,6 +23,7 @@ $user = getUser($con, $id_user);
 
 
 $subscription_date = $user['subscription_date'];
+
 
 $datetime1 = new DateTime($subscription_date);
 $datetime2 = new DateTime();
@@ -87,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql_update .= " WHERE id_user='$id_user'";
 
         if (update($con, $sql_update)) {
-            $show_success_alert = true; // ✅ Esto indica que fue exitoso
+            $show_success_alert = true; // Esto indica que fue exitoso
         } else {
             echo "<p style='color: red;'>Error al actualizar el usuario: " . mysqli_error($con) . "</p>";
         }
@@ -121,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="index.php">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="home.php">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="libros.php">Libros</a></li>
                     <li class="nav-item"><a class="nav-link" href="autores.php">Autores</a></li>
                     <li class="nav-item"><a class="nav-link" href="ranking.php">Ranking</a></li>
