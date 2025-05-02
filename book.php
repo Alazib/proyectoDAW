@@ -1,8 +1,7 @@
 <?php
-session_start();
 
-$alias = $_SESSION['alias'];
-$id_user = $_SESSION['id_user'];
+require('./components/navbar.php');
+
 
 $bookId = isset($_GET['id']) ? $_GET['id'] : null;
 
@@ -36,30 +35,6 @@ $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
 </head>
 
 <body>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">Proyecto</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="home.php">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="libros.php">Libros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="autores.php">Autores</a></li>
-                    <li class="nav-item"><a class="nav-link" href="ranking.php">Ranking</a></li>
-                    <li class="nav-item"><a class="nav-link" href="wishlist.php">Wishlist</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="user_profile.php?id=<?php echo $id_user; ?>">
-                            Perfil de <?php echo htmlspecialchars($alias); ?>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <main class="container content-container">
         <?php if ($bookId && $responseBookDetails): ?>

@@ -1,14 +1,11 @@
 <?php
 
 require("utils/api_openlibrary.php");
+require('./components/navbar.php');
 
-session_start();
+$user_is_logged = isset($alias, $id_user);
 
-$alias = $_SESSION['alias'];
-$id_user = $_SESSION['id_user'];
-$user_is_logged = isset($_SESSION['alias'], $_SESSION['id_user']);
-
-if (!isset($_SESSION['id_user'])) {
+if (!isset($id_user)) {
     header('Location: index.php');
     exit();
 }
@@ -32,30 +29,6 @@ $recomendaciones = getRandomBooks(12);
 </head>
 
 <body>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">Proyecto</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="home.php">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="libros.php">Libros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="autores.php">Autores</a></li>
-                    <li class="nav-item"><a class="nav-link" href="ranking.php">Ranking</a></li>
-                    <li class="nav-item"><a class="nav-link" href="wishlist.php">Wishlist</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="user_profile.php?id=<?php echo $id_user; ?>">
-                            Perfil de <?php echo htmlspecialchars($alias); ?>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <!-- Banner -->
     <div class="bg-light py-4 text-center border-bottom">

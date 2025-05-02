@@ -1,21 +1,10 @@
 <?php
-session_start();
 
 require("database.php");
+require('./components/navbar.php');
 
 $con = conectar();
 $show_success_alert = false;
-
-
-// Verificar si se recibió un ID por GET
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-
-    die("ID de usuario no proporcionado.");
-}
-
-// Obtener id del usuario a través de la URL
-$id_user = $_GET['id'];
-$id_user = mysqli_real_escape_string($con, $id_user); // Seguridad contra SQL Injection
 
 
 // Obtener datos del usuario
@@ -90,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql_update .= " WHERE id_user='$id_user'";
 
         if (update($con, $sql_update)) {
-            $show_success_alert = true; // Esto indica que fue exitoso
+            $show_success_alert = true; // Los cambios se guardaron satisfactoriamente y quiero que se muestre el alert comunicándoselo al usuario
         } else {
             echo "<p style='color: red;'>Error al actualizar el usuario: " . mysqli_error($con) . "</p>";
         }
@@ -116,30 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php endif; ?>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">Proyecto</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="home.php">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="libros.php">Libros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="autores.php">Autores</a></li>
-                    <li class="nav-item"><a class="nav-link" href="ranking.php">Ranking</a></li>
-                    <li class="nav-item"><a class="nav-link" href="wishlist.php">Wishlist</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="user_profile.php?id=<?php echo $id_user; ?>">
-                            Perfil de <?php echo htmlspecialchars($user['alias']); ?>
-                        </a>
-                    </li>
 
-
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <div class="container mt-5">
         <h2 class="text-center"><?= htmlspecialchars($user['user_name']); ?> <?= htmlspecialchars($user['user_last_name_1']); ?></h2>
