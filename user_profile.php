@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $new_filename = $id_user . "." . $ext;
                     if (move_uploaded_file($_FILES['profile_image']['tmp_name'], "images/profile/" . $new_filename)) {
                         $profile_image = "images/profile/" . $new_filename;
-                        
+
                         // Actualizar la URL de la imagen en la base de datos
                         $sql_image_update = "UPDATE users SET user_image_url='$profile_image' WHERE id_user='$id_user'";
                         mysqli_query($con, $sql_image_update);
@@ -142,81 +142,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Editar Perfil de Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .profile-container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-        .profile-header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #e9ecef;
-            padding-bottom: 20px;
-        }
-        .profile-img-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px auto;
-        }
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid #e9ecef;
-        }
-        .profile-img-upload {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: #28a745;
-            color: white;
-            border-radius: 50%;
-            padding: 8px;
-            cursor: pointer;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-        .profile-img-upload:hover {
-            background: #218838;
-        }
-        .form-section {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .section-title {
-            margin-bottom: 20px;
-            color: #343a40;
-            font-weight: 600;
-        }
-        .btn-action {
-            margin-top: 10px;
-            padding: 10px 25px;
-            border-radius: 5px;
-        }
-        .subscription-info {
-            font-size: 14px;
-            color: #6c757d;
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/user_profile.css">
+
 </head>
 
 <body>
     <?php if ($show_success_alert): ?>
-    <script>
-        alert("✅ Cambios guardados satisfactoriamente.");
-        window.location.href = "home.php";
-    </script>
+        <script>
+            alert("✅ Cambios guardados satisfactoriamente.");
+            window.location.href = "home.php";
+        </script>
     <?php endif; ?>
 
     <div class="container">
@@ -228,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Verificar si la imagen existe en el sistema de archivos
                     if (file_exists($profile_image)) {
                         echo '<img src="' . $profile_image . '" class="profile-img" id="profile-preview" alt="Imagen de perfil">';
-                    } 
+                    }
                     // Verificar si el usuario tiene una URL de imagen en la base de datos
                     else if (!empty($user['user_image_url'])) {
                         echo '<img src="' . $user['user_image_url'] . '" class="profile-img" id="profile-preview" alt="Imagen de perfil">';
@@ -247,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p><strong>Suscrito desde:</strong> <?= $subscription_date ?> (hace <?= $time_elapsed ?>)</p>
                 </div>
                 <?php if (!empty($upload_error)): ?>
-                <div class="alert alert-danger"><?= $upload_error ?></div>
+                    <div class="alert alert-danger"><?= $upload_error ?></div>
                 <?php endif; ?>
             </div>
 
