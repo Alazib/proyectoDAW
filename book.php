@@ -45,13 +45,16 @@ $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
                     </div>
                     <div class="col-md-8">
                         <h2><?php echo htmlspecialchars($bookDetails['title']); ?></h2>
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="<?php echo $urlAuthorPhoto; ?>" alt="Foto del autor" class="rounded-circle me-3 shadow author-photo">
+                        <a class="d-flex align-items-center mb-3 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" style=" width: fit-content"
+                            href="author.php?id=<?php echo urlencode(str_replace('/authors/', '', $authorId)); ?>">
+
+                            <img src=" <?php echo $urlAuthorPhoto; ?>" alt="Foto del autor" class="rounded-circle me-3 shadow author-photo">
                             <div>
                                 <h5 class="mb-0"><?php echo htmlspecialchars($authorDetails['personal_name']); ?></h5>
                                 <small class="text-muted">Autor</small>
                             </div>
-                        </div>
+
+                        </a>
                         <p class="book-description">
                             <?php echo isset($bookDetails['description'])
                                 ? (is_array($bookDetails['description'])
