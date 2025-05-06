@@ -79,7 +79,7 @@ $alternateNames = $author['alternate_names'] ?? [];
                 $validBooks = [];
                 foreach ($works as $work) {
                     $coverId = $work['covers'][0] ?? null;
-                    if (!$coverId) continue;
+                    if (!$coverId) continue; // Si el libro no tiene cover pasa de libro y ve al siguiente.
 
                     $title = $work['title'] ?? 'Sin título';
                     $id = isset($work['key']) ? substr($work['key'], 7) : '';
