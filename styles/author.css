@@ -1,0 +1,79 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f9;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  z-index: 1030;
+}
+
+.content-container {
+  flex: 1 0 auto;
+  padding-top: 100px;
+  padding-bottom: 80px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.book-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.book-card h2 {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.book-description {
+  font-size: 1rem;
+  color: #4a4a4a;
+  line-height: 1.6;
+}
+
+.star-rating {
+  font-size: 2rem;
+  color: #ffc107;
+}
+
+.comments-section {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.comment img {
+  flex-shrink: 0;
+}
+
+.footer {
+  flex-shrink: 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.star {
+  font-size: 2rem;
+  color: #ccc; /* gris por defecto */
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.star.hovered,
+.star.selected {
+  color: #ffc107; /* amarillo */
+}
