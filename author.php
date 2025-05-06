@@ -1,5 +1,6 @@
 <?php
 require('./components/navbar.php');
+require_once('./utils/http_helper.php');
 
 // Validación del parámetro
 $authorId = isset($_GET['id']) ? $_GET['id'] : null;
@@ -10,16 +11,23 @@ if (!$authorId) {
 
 // Obtener datos del autor
 $infoUrl = "https://openlibrary.org/authors/$authorId.json";
-$infoResponse = file_get_contents($infoUrl);
-if (!$infoResponse) {
-    echo "<p class='text-center mt-5'>No se pudo obtener la información del autor.</p>";
+$infoResponse = safe_file_get_contents($infoUrl);
+if ($infoResponse === false) {
+    // manejar error: mostrar mensaje o fallback
+    echo "<p class='text-center text-danger'>No se pudo obtener información de Open Library. Inténtalo más tarde.</p>";
     exit();
 }
 $author = json_decode($infoResponse, true);
 
 // Obtener lista de obras
 $worksUrl = "https://openlibrary.org/authors/$authorId/works.json?limit=50";
-$worksResponse = file_get_contents($worksUrl);
+
+$worksResponse = safe_file_get_contents($worksUrl);
+if ($worksResponse === false) {
+    // manejar error: mostrar mensaje o fallback
+    echo "<p class='text-center text-danger'>No se pudo obtener información de Open Library. Inténtalo más tarde.</p>";
+    exit();
+}
 $works = $worksResponse ? json_decode($worksResponse, true)['entries'] : [];
 
 $authorName = $author['personal_name'] ?? $author['name'] ?? 'Autor desconocido';

@@ -1,17 +1,32 @@
 <?php
 
 require('./components/navbar.php');
+require_once('./utils/http_helper.php');
 
 
 $bookId = isset($_GET['id']) ? $_GET['id'] : null;
 
 $urlBookDetails = "https://openlibrary.org/works/$bookId.json";
-$responseBookDetails = file_get_contents($urlBookDetails);
+
+$responseBookDetails = safe_file_get_contents($urlBookDetails);
+if ($responseBookDetails === false) {
+    // manejar error: mostrar mensaje o fallback
+    echo "<p class='text-center text-danger'>No se pudo obtener información de Open Library. Inténtalo más tarde.</p>";
+    exit();
+}
+
 $bookDetails = json_decode($responseBookDetails, true);
 
 $authorId = $bookDetails['authors'][0]['author']['key'];
 $urlAuthorDetails = "https://openlibrary.org/$authorId.json";
-$responseAuthorDetails = file_get_contents($urlAuthorDetails);
+
+$responseAuthorDetails = safe_file_get_contents($urlAuthorDetails);
+if ($responseAuthorDetails === false) {
+    // manejar error: mostrar mensaje o fallback
+    echo "<p class='text-center text-danger'>No se pudo obtener información de Open Library. Inténtalo más tarde.</p>";
+    exit();
+}
+
 $authorDetails = json_decode($responseAuthorDetails, true);
 
 $authorPhotoId = $authorDetails['photos'][0];

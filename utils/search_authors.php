@@ -1,4 +1,6 @@
 <?php
+require_once 'http_helper.php';
+
 header('Content-Type: application/json');
 
 $query = $_GET['q'] ?? '';
@@ -9,10 +11,10 @@ if (strlen($query) < 3) {
 }
 
 $url = "https://openlibrary.org/search/authors.json?q=" . urlencode($query);
-$response = file_get_contents($url);
-
+$response = safe_file_get_contents($url);
 if ($response === false) {
-    echo json_encode([]);
+    // manejar error: mostrar mensaje o fallback
+    echo "<p class='text-center text-danger'>No se pudo obtener información de Open Library. Inténtalo más tarde.</p>";
     exit();
 }
 
