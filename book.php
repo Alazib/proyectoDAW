@@ -38,6 +38,17 @@ $bookCoverId = $bookDetails['covers'][0];
 $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
 
 
+// Obtener las wishlists del usuario
+$id_user = $_SESSION['id_user'];
+$query_wishlist = "SELECT * FROM wishlist WHERE id_user = ?";
+$stmt_wishlist = $con->prepare($query_wishlist);
+$stmt_wishlist->bind_param("i", $id_user);
+$stmt_wishlist->execute();
+$result_wishlist = $stmt_wishlist->get_result();
+$wishlists = $result_wishlist->fetch_all(MYSQLI_ASSOC);
+
+
+
 
 ?>
 
@@ -85,52 +96,46 @@ $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
                     </div>
                 </div>
             </div>
-
             <!-- Botón wishlist -->
             <div class="text-center my-4">
-                <button id="addToWishlist" class="btn btn-outline-primary btn-lg">Agregar a Wishlist</button>
+                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#wishlistModal">
+                    Agregar a Wishlist
+                </button>
             </div>
 
             <!-- Modal wishlist -->
-            <div id="wishlistModal" style="display:none;">
-                <h3>Selecciona una Wishlist o crea una nueva</h3>
-                <form id="wishlistForm">
-                    <select name="wishlist_id" id="wishlistSelect">
-                        <?php
-                        $wishlists = getUserWishLists($con, $id_user);
-                        while ($wishlist = mysqli_fetch_assoc($wishlists)) {
-
-                            echo "<option value='$wishlist[id_wishlist]'>
-                                {$wishlist['wishlist_name']}
-                            </option>";
-                        };
-
-                        ?>
-                    </select>
-
-                    <h4>O crear una nueva:</h4>
-                    <input type="text" id="newWishlistName" placeholder="Nombre de la nueva wishlist">
-                    <button type="submit">Guardar en Wishlist</button>
-                </form>
-            </div>
-
-            <!-- Puntuación -->
-            <div class="rating-section text-center mb-4">
-                <h5 class="card-title">Puntuar libro</h5>
-                <div class="star-rating" id="star-rating">
-                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                        <span class="star" data-value="<?php echo $i; ?>">☆</span> <!-- Estrella vacía -->
-                    <?php endfor; ?>
+            <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="wishlistModalLabel">Selecciona una Wishlist o crea una nueva</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="wishlistForm">
+                                <div class="mb-3">
+                                    <label for="wishlistSelect" class="form-label">Elige una Wishlist:</label>
+                                    <select class="form-select" name="wishlist_id" id="wishlistSelect">
+                                        <?php foreach ($wishlists as $wishlist): ?>
+                                            <option value="<?php echo $wishlist['id_wishlist']; ?>">
+                                                <?php echo $wishlist['wishlist_name']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newWishlistName" class="form-label">O crear una nueva:</label>
+                                    <input type="text" class="form-control" id="newWishlistName" placeholder="Nombre de la nueva wishlist">
+                                </div>
+                                <button type="submit" class="btn btn-success">Guardar en Wishlist</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <p id="rating-result" class="mt-2 text-muted">Haz clic en una estrella para puntuar.</p>
-
             </div>
+
 
             <script>
-                document.getElementById('addToWishlist').addEventListener('click', function() {
-                    document.getElementById('wishlistModal').style.display = 'block';
-                });
-
                 document.getElementById('wishlistForm').addEventListener('submit', function(e) {
                     e.preventDefault();
 
@@ -151,13 +156,26 @@ $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
                         })
                         .then(response => response.json())
                         .then(data => {
-
                             alert(data.message);
-
+                            location.reload();
                         })
                         .catch(error => console.error('Error:', error));
                 });
             </script>
+
+
+            <!-- Puntuación -->
+            <div class="rating-section text-center mb-4">
+                <h5 class="card-title">Puntuar libro</h5>
+                <div class="star-rating" id="star-rating">
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <span class="star" data-value="<?php echo $i; ?>">☆</span> <!-- Estrella vacía -->
+                    <?php endfor; ?>
+                </div>
+                <p id="rating-result" class="mt-2 text-muted">Haz clic en una estrella para puntuar.</p>
+
+            </div>
+
 
 
             <!-- Comentarios -->
