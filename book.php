@@ -2,6 +2,8 @@
 
 require('./components/navbar.php');
 require_once('./utils/http_helper.php');
+require_once('./database.php');
+$con = conectar();
 
 
 $bookId = isset($_GET['id']) ? $_GET['id'] : null;
@@ -34,6 +36,9 @@ $urlAuthorPhoto = "//covers.openlibrary.org/a/id/$authorPhotoId-M.jpg";
 
 $bookCoverId = $bookDetails['covers'][0];
 $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +88,30 @@ $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
 
             <!-- Botón wishlist -->
             <div class="text-center my-4">
-                <button class="btn btn-outline-primary btn-lg">Agregar a Wishlist</button>
+                <button id="addToWishlist" class="btn btn-outline-primary btn-lg">Agregar a Wishlist</button>
+            </div>
+
+            <!-- Modal wishlist -->
+            <div id="wishlistModal" style="display:none;">
+                <h3>Selecciona una Wishlist o crea una nueva</h3>
+                <form id="wishlistForm">
+                    <select name="wishlist_id" id="wishlistSelect">
+                        <?php
+                        $wishlists = getUserWishLists($con, $id_user);
+                        while ($wishlist = mysqli_fetch_assoc($wishlists)) {
+
+                            echo "<option value='$wishlist[id_wishlist]'>
+                                {$wishlist['wishlist_name']}
+                            </option>";
+                        };
+
+                        ?>
+                    </select>
+
+                    <h4>O crear una nueva:</h4>
+                    <input type="text" id="newWishlistName" placeholder="Nombre de la nueva wishlist">
+                    <button type="submit">Guardar en Wishlist</button>
+                </form>
             </div>
 
             <!-- Puntuación -->
@@ -97,6 +125,40 @@ $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
                 <p id="rating-result" class="mt-2 text-muted">Haz clic en una estrella para puntuar.</p>
 
             </div>
+
+            <script>
+                document.getElementById('addToWishlist').addEventListener('click', function() {
+                    document.getElementById('wishlistModal').style.display = 'block';
+                });
+
+                document.getElementById('wishlistForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const wishlistId = document.getElementById('wishlistSelect').value;
+                    const newWishlistName = document.getElementById('newWishlistName').value;
+
+                    fetch('utils/save_to_wishlist.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id_book: '<?php echo $bookId; ?>',
+                                id_user: '<?php echo $id_user; ?>',
+                                wishlist_id: wishlistId,
+                                new_wishlist_name: newWishlistName
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+
+                            alert(data.message);
+
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            </script>
+
 
             <!-- Comentarios -->
             <div class="comments-section mb-5">
