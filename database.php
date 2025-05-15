@@ -112,6 +112,16 @@ function getAllCountries($con)
 	return $countries;
 }
 
+function getUserWishLists($con, $id_user)
+{
+	$stmt = mysqli_prepare($con, "select * from wishlist where id_user=?;");
+	mysqli_stmt_bind_param($stmt, "i", $id_user);
+	mysqli_stmt_execute($stmt);
+	$wishlists = mysqli_stmt_get_result($stmt);
+
+	return $wishlists;
+}
+
 
 
 //UPDATES

@@ -2,6 +2,8 @@
 
 require('./components/navbar.php');
 require_once('./utils/http_helper.php');
+require_once('./database.php');
+$con = conectar();
 
 
 $bookId = isset($_GET['id']) ? $_GET['id'] : null;
@@ -34,6 +36,20 @@ $urlAuthorPhoto = "//covers.openlibrary.org/a/id/$authorPhotoId-M.jpg";
 
 $bookCoverId = $bookDetails['covers'][0];
 $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
+
+
+// Obtener las wishlists del usuario
+$id_user = $_SESSION['id_user'];
+$query_wishlist = "SELECT * FROM wishlist WHERE id_user = ?";
+$stmt_wishlist = $con->prepare($query_wishlist);
+$stmt_wishlist->bind_param("i", $id_user);
+$stmt_wishlist->execute();
+$result_wishlist = $stmt_wishlist->get_result();
+$wishlists = $result_wishlist->fetch_all(MYSQLI_ASSOC);
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -80,11 +96,73 @@ $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
                     </div>
                 </div>
             </div>
-
             <!-- Botón wishlist -->
             <div class="text-center my-4">
-                <button class="btn btn-outline-primary btn-lg">Agregar a Wishlist</button>
+                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#wishlistModal">
+                    Agregar a Wishlist
+                </button>
             </div>
+
+            <!-- Modal wishlist -->
+            <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="wishlistModalLabel">Selecciona una Wishlist o crea una nueva</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="wishlistForm">
+                                <div class="mb-3">
+                                    <label for="wishlistSelect" class="form-label">Elige una Wishlist:</label>
+                                    <select class="form-select" name="wishlist_id" id="wishlistSelect">
+                                        <?php foreach ($wishlists as $wishlist): ?>
+                                            <option value="<?php echo $wishlist['id_wishlist']; ?>">
+                                                <?php echo $wishlist['wishlist_name']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newWishlistName" class="form-label">O crear una nueva:</label>
+                                    <input type="text" class="form-control" id="newWishlistName" placeholder="Nombre de la nueva wishlist">
+                                </div>
+                                <button type="submit" class="btn btn-success">Guardar en Wishlist</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <script>
+                document.getElementById('wishlistForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const wishlistId = document.getElementById('wishlistSelect').value;
+                    const newWishlistName = document.getElementById('newWishlistName').value;
+
+                    fetch('utils/save_to_wishlist.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id_book: '<?php echo $bookId; ?>',
+                                id_user: '<?php echo $id_user; ?>',
+                                wishlist_id: wishlistId,
+                                new_wishlist_name: newWishlistName
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.message);
+                            location.reload();
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            </script>
+
 
             <!-- Puntuación -->
             <div class="rating-section text-center mb-4">
@@ -97,6 +175,8 @@ $urlBookCover = "https://covers.openlibrary.org/b/id/$bookCoverId-L.jpg";
                 <p id="rating-result" class="mt-2 text-muted">Haz clic en una estrella para puntuar.</p>
 
             </div>
+
+
 
             <!-- Comentarios -->
             <div class="comments-section mb-5">
