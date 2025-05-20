@@ -70,11 +70,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         user_last_name_1='$user_last_name_1', 
                                         user_last_name_2='$user_last_name_2',
                                         id_gender='$id_gender',
+                                        email='$email',
+                                        id_rol='$id_rol' 
+                                        ";
+
+        if (!empty($id_country)) {
+
+            // Añadir a la consulta  el país
+            $sql_update = "UPDATE users SET alias='$alias', 
+                                        user_name='$user_name', 
+                                        user_last_name_1='$user_last_name_1', 
+                                        user_last_name_2='$user_last_name_2',
+                                        id_gender='$id_gender',
+                                        id_country='$id_country',
+                                        email='$email',
+                                        id_rol='$id_rol' 
+                                        ";
+        }
+
+        if (!empty($user_birth_date)) {
+
+            // Añadir a la consulta  el país
+            $sql_update = "UPDATE users SET alias='$alias', 
+                                        user_name='$user_name', 
+                                        user_last_name_1='$user_last_name_1', 
+                                        user_last_name_2='$user_last_name_2',
+                                        id_gender='$id_gender',
+                                        user_birth_date='$user_birth_date',
+                                        email='$email',
+                                        id_rol='$id_rol' 
+                                        ";
+        }
+
+        if (!empty($id_country) && !empty($user_birth_date)) {
+
+            // Añadir a la consulta  el país y la fecha de nacimiento
+            $sql_update = "UPDATE users SET alias='$alias', 
+                                        user_name='$user_name', 
+                                        user_last_name_1='$user_last_name_1', 
+                                        user_last_name_2='$user_last_name_2',
+                                        id_gender='$id_gender',
                                         id_country='$id_country',
                                         user_birth_date='$user_birth_date',
                                         email='$email',
                                         id_rol='$id_rol' 
                                         ";
+        }
+
 
         // Si el usuario ingresó una nueva contraseña, la encriptamos y la actualizamos
         if (!empty($password)) {
